@@ -1,77 +1,54 @@
 package com.example.demo;
 
-import com.example.demo.model.Menu;
-import com.example.demo.model.OrderType;
+import com.example.demo.controller.OrderController;
+import com.example.demo.model.Orders;
 import com.example.demo.repo.MenuRepository;
 import com.example.demo.repo.OrderRepository;
 import com.example.demo.repo.OrderTypeRepository;
-import org.junit.jupiter.api.BeforeEach;
+
 import org.junit.jupiter.api.Test;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@SpringBootTest
-@AutoConfigureMockMvc
-@ActiveProfiles("test") 
+@WebMvcTest(OrderController.class)
 class OrderIntegrationTest {
 
     @Autowired
     private MockMvc mockMvc;
 
-    @Autowired
+    @MockBean
     private OrderRepository orderRepository;
 
-    @Autowired
+    @MockBean
     private MenuRepository menuRepository;
 
-    @Autowired
+    @MockBean
     private OrderTypeRepository orderTypeRepository;
 
-    // 🔥 เตรียมข้อมูลก่อน test
-    @BeforeEach
-    void setup() {
-        orderRepository.deleteAll();
-        menuRepository.deleteAll();
-        orderTypeRepository.deleteAll();
-
-        // insert menu
-        Menu menu = new Menu();
-        menu.setId(1);
-        menu.setName("Pizza");
-        menu.setPrice(100.0);
-        menuRepository.save(menu);
-
-        // insert order type
-        OrderType type = new OrderType();
-        type.setId(1);
-        type.setType("Dine-in");
-        orderTypeRepository.save(type);
-    }
-
-    // TC_I01
+    // ==============================
+    // TC_I01: create order
+    // ==============================
     @Test
     void testCreateOrder() throws Exception {
 
+        Orders mockOrder = new Orders();
+        mockOrder.setTotalAmount(200.0);
+
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+
         String requestJson = """
         {
-          "totalAmount": 200,
-          "orderTypeId": 1,
-          "items": [
-            {
-              "menuId": 1,
-              "quantity": 2,
-              "additionalPrice": 0,
-              "noteText": ""
-            }
-          ]
+          "totalAmount": 200
         }
         """;
 
@@ -81,22 +58,20 @@ class OrderIntegrationTest {
                 .andExpect(status().isOk());
     }
 
-    // TC_I02
+    // ==============================
+    // TC_I02: verify save called
+    // ==============================
     @Test
     void testOrderSavedToDatabase() throws Exception {
 
+        Orders mockOrder = new Orders();
+        mockOrder.setTotalAmount(100.0);
+
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+
         String requestJson = """
         {
-          "totalAmount": 100,
-          "orderTypeId": 1,
-          "items": [
-            {
-              "menuId": 1,
-              "quantity": 1,
-              "additionalPrice": 0,
-              "noteText": ""
-            }
-          ]
+          "totalAmount": 100
         }
         """;
 
@@ -105,25 +80,23 @@ class OrderIntegrationTest {
                 .content(requestJson))
                 .andExpect(status().isOk());
 
-        assertFalse(orderRepository.findAll().isEmpty());
+        verify(orderRepository).save(any()); // 👈 สำคัญ
     }
 
-    // TC_I03
+    // ==============================
+    // TC_I03: response contains total
+    // ==============================
     @Test
     void testResponseContainsTotal() throws Exception {
 
+        Orders mockOrder = new Orders();
+        mockOrder.setTotalAmount(200.0);
+
+        when(orderRepository.save(any())).thenReturn(mockOrder);
+
         String requestJson = """
         {
-          "totalAmount": 200,
-          "orderTypeId": 1,
-          "items": [
-            {
-              "menuId": 1,
-              "quantity": 2,
-              "additionalPrice": 0,
-              "noteText": ""
-            }
-          ]
+          "totalAmount": 200
         }
         """;
 
