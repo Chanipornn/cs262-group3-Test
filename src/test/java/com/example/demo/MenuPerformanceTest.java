@@ -48,7 +48,7 @@ public class MenuPerformanceTest {
         assertTrue(avgTime < 2000); // < 2 วินาที
     }
     
-    // TC_P02: Concurrent Users (ยิงพร้อมกัน)
+    // TC_P02: Baseline Test (โหลดเมนู)
     @Test
     void testConcurrentUsers() throws InterruptedException {
 
@@ -73,44 +73,39 @@ public class MenuPerformanceTest {
         System.out.println("✅ Concurrent test ผ่าน (20 users)");
     }
     
-    // TC_P03: สร้าง order หลายครั้ง (POST)
+    
+    // TC_P03: โหลดหน้าไม่เกิน 3 วิ
     @Test
-    void testCreateOrderPerformance() {
+    void testPageLoadUnder3Seconds() {
 
-        int requestCount = 30;
+        int requestCount = 10;
         long totalTime = 0;
-
-        String json = """
-            {
-              "items": [
-                { "menuId": 1, "quantity": 1 }
-              ]
-            }
-            """;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-
-        HttpEntity<String> request = new HttpEntity<>(json, headers);
 
         for (int i = 0; i < requestCount; i++) {
 
             long start = System.currentTimeMillis();
 
             ResponseEntity<String> response =
-                    restTemplate.postForEntity(baseUrl() + "/api/order", request, String.class);
+                    restTemplate.getForEntity(baseUrl() + "/api/menu", String.class);
 
             long end = System.currentTimeMillis();
-            totalTime += (end - start);
+            long responseTime = end - start;
 
-            // ถ้า API ยังไม่มี ยังไม่ต้อง assert 200
-            assertTrue(response.getStatusCode().is2xxSuccessful()
-                    || response.getStatusCode().is4xxClientError());
+            totalTime += responseTime;
+
+            assertEquals(HttpStatus.OK, response.getStatusCode());
+
+            // เช็คแต่ละ request
+            assertTrue(responseTime < 3000,
+                    "ช้าเกิน: " + responseTime + " ms");
         }
 
         long avgTime = totalTime / requestCount;
 
-        System.out.println("⏱️ Order Avg: " + avgTime + " ms");
+        System.out.println("⏱️ Avg Load (<3s): " + avgTime + " ms");
+
+        // เช็คค่าเฉลี่ย
+        assertTrue(avgTime < 3000);
     }
 
 }
