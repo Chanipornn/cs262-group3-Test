@@ -74,10 +74,10 @@
 --------------------------------------------------------------------------
 
 ## โครงสร้างโปรเจกต์
-controller/
-dto/
-service/
-repository/
-model/
-test/
+- controller/
+- dto/
+- service/
+- repository/
+- model/
+- test/
 
