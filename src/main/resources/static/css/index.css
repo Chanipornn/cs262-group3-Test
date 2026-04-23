@@ -1,0 +1,94 @@
+@import url('https://fonts.googleapis.com/css2?family=Prompt:wght@400;500;600;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Prompt", sans-serif;
+}
+:root{
+    --bg: #c62828;
+    --logo-size-desktop: 220px;
+    --logo-size-mobile: 160px;
+  }
+  
+  /* Reset basics */
+  * { box-sizing: border-box; }
+  html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    font-family: "Prompt", system-ui, -apple-system, "Helvetica Neue", Arial;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Logo */
+  .logo {
+    display: block;
+    width: var(--logo-size-desktop);
+    width: 320px;
+    height: auto;
+    transform-origin: center;
+    transform: scale(0);
+    filter: brightness(0) invert(1); /* à¹€à¸›à¸¥à¸µà¹ˆà¸¢à¸™à¹€à¸›à¹‡à¸™à¸ªà¸µà¸‚à¸²à¸§ */
+  }
+
+
+/* Buttons */
+.button-group {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.btn {
+  border: none;
+  padding: 12px 28px;
+  border-radius: 10px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-gray {
+	background-color: #C4C4C4;
+	color: white;
+}
+.btn-yellow {
+	color: #9d0a0a;
+	background-color: #ffd54f;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+}
+
+  
+  /* bounce / pop animation (single-run) */
+  @keyframes popBounce {
+    0%   { transform: scale(0); }
+    50%  { transform: scale(1.18); }   
+    75%  { transform: scale(0.92); }  
+    100% { transform: scale(1); }      
+  }
+  
+  .logo.pop {
+    animation: popBounce 900ms cubic-bezier(.22,.9,.31,1) forwards;
+  }
+  
+  /* Reduced motion support */
+  @media (prefers-reduced-motion: reduce) {
+    .logo.pop { animation: none; transform: scale(1); }
+  }
+  
+  /* Mobile tweaks */
+  @media (max-width: 480px) {
+    :root { --logo-size-desktop: var(--logo-size-mobile); }
+  }
