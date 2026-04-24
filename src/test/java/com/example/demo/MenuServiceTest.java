@@ -38,7 +38,7 @@ public class MenuServiceTest {
 
     // ค้นหาเจอ
     @Test
-    void testSearch_found() {
+    void testSearch01_found() {
         List<Menu> result = service.searchMenu("Pizza", null);
         assertEquals(1, result.size());
         assertEquals("Pizza", result.get(0).getName());
@@ -46,21 +46,21 @@ public class MenuServiceTest {
 
     // ค้นหาไม่เจอ
     @Test
-    void testSearch_notFound() {
+    void testSearch02_notFound() {
         List<Menu> result = service.searchMenu("Burger", null);
         assertTrue(result.isEmpty());
     }
 
     // input ว่าง
     @Test
-    void testSearch_emptyQuery() {
+    void testSearch03_emptyQuery() {
         List<Menu> result = service.searchMenu("", null);
         assertEquals(2, result.size());
     }
 
     // filter category
     @Test
-    void testSearch_filterCategory() {
+    void testSearch04_filterCategory() {
         List<Menu> result = service.searchMenu(null, 2L);
         assertEquals(1, result.size());
         assertEquals("Coke", result.get(0).getName());
@@ -68,7 +68,7 @@ public class MenuServiceTest {
     
     // case insensitive
     @Test
-    void testSearch_caseInsensitive() {
+    void testSearch05_caseInsensitive() {
         List<Menu> result = service.searchMenu("pizza", null);
 
         assertEquals(1, result.size());
@@ -76,7 +76,7 @@ public class MenuServiceTest {
 
     // invalid category
     @Test
-    void testSearch_invalidCategory() {
+    void testSearch06_invalidCategory() {
         List<Menu> result = service.searchMenu(null, 999L);
 
         assertTrue(result.isEmpty());

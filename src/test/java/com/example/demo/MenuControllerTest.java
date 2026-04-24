@@ -42,7 +42,7 @@ public class MenuControllerTest {
 
     // ค้นหาเจอ
     @Test
-    void testSearch_found() throws Exception {
+    void A01_testSearchfound() throws Exception {
 
         Menu m = createMenu("Pizza", 1L);
 
@@ -57,7 +57,7 @@ public class MenuControllerTest {
 
     // ค้นหาไม่เจอ
     @Test
-    void testSearch_notFound() throws Exception {
+    void A02_testSearchnotFound() throws Exception {
 
         Mockito.when(service.searchMenu(eq("Burger"), isNull()))
                 .thenReturn(List.of());
@@ -69,7 +69,7 @@ public class MenuControllerTest {
 
     // input ว่าง → ต้องได้ทั้งหมด
     @Test
-    void testSearch_emptyQuery() throws Exception {
+    void A03_testSearchemptyQuery() throws Exception {
 
         Menu m1 = createMenu("Pizza", 1L);
         Menu m2 = createMenu("Coke", 2L);
@@ -84,7 +84,7 @@ public class MenuControllerTest {
 
     // filter category
     @Test
-    void testSearch_filterCategory() throws Exception {
+    void A04_testSearchfilterCategory() throws Exception {
 
         Menu m = createMenu("Coke", 2L);
 
@@ -99,7 +99,7 @@ public class MenuControllerTest {
 
     // search + filter
     @Test
-    void testSearch_searchAndFilter() throws Exception {
+    void A05_testSearchsearchAndFilter() throws Exception {
 
         Menu m = createMenu("Pizza", 1L);
 
@@ -114,7 +114,7 @@ public class MenuControllerTest {
 
     // case insensitive
     @Test
-    void testSearch_caseInsensitive() throws Exception {
+    void A06_testSearchcaseInsensitive() throws Exception {
 
         Menu m = createMenu("Pizza", 1L);
 
@@ -128,7 +128,7 @@ public class MenuControllerTest {
 
     // category ไม่มี
     @Test
-    void testSearch_invalidCategory() throws Exception {
+    void A07_testSearchinvalidCategory() throws Exception {
 
         Mockito.when(service.searchMenu(isNull(), eq(999L)))
                 .thenReturn(List.of());

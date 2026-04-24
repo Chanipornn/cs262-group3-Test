@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 public class CartTest {
 
     @Test
-    void testAddToCart() {
+    void test01_AddToCart() {
         Cart cart = new Cart();
         cart.addToCart("Pizza", 100);
 
@@ -14,7 +14,7 @@ public class CartTest {
     }
 
     @Test
-    void testRemoveFromCart() {
+    void test02_RemoveFromCart() {
         Cart cart = new Cart();
         cart.addToCart("Pizza", 100);
         cart.removeFromCart("Pizza");
@@ -23,7 +23,7 @@ public class CartTest {
     }
 
     @Test
-    void testUpdateQuantity() {
+    void test03_UpdateQuantity() {
         Cart cart = new Cart();
         cart.addToCart("Pizza", 100);
         cart.updateQuantity("Pizza", 3);

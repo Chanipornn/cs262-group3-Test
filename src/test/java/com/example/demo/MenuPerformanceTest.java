@@ -24,7 +24,7 @@ public class MenuPerformanceTest {
 
     // TC_P01: โหลดเมนู (GET /api/menu หลายครั้ง)
     @Test
-    void testLoadMenuPerformance() {
+    void TC_P01_testLoadMenuPerformance() {
 
         int requestCount = 50;
         long totalTime = 0;
@@ -43,14 +43,14 @@ public class MenuPerformanceTest {
 
         long avgTime = totalTime / requestCount;
 
-        System.out.println("⏱️ Average Response Time: " + avgTime + " ms");
+        System.out.println("Average Response Time: " + avgTime + " ms");
 
         assertTrue(avgTime < 2000); // < 2 วินาที
     }
     
     // TC_P02: Baseline Test (โหลดเมนู)
     @Test
-    void testConcurrentUsers() throws InterruptedException {
+    void TC_P02_testConcurrentUsers() throws InterruptedException {
 
         int users = 20;
         Thread[] threads = new Thread[users];
@@ -70,13 +70,13 @@ public class MenuPerformanceTest {
         // รอทุก thread จบ
         for (Thread t : threads) t.join();
 
-        System.out.println("✅ Concurrent test ผ่าน (20 users)");
+        System.out.println("Concurrent test ผ่าน (20 users)");
     }
     
     
     // TC_P03: โหลดหน้าไม่เกิน 3 วิ
     @Test
-    void testPageLoadUnder3Seconds() {
+    void TC_P03_testPageLoadUnder3Seconds() {
 
         int requestCount = 10;
         long totalTime = 0;
@@ -102,7 +102,7 @@ public class MenuPerformanceTest {
 
         long avgTime = totalTime / requestCount;
 
-        System.out.println("⏱️ Avg Load (<3s): " + avgTime + " ms");
+        System.out.println("Avg Load (<3s): " + avgTime + " ms");
 
         // เช็คค่าเฉลี่ย
         assertTrue(avgTime < 3000);

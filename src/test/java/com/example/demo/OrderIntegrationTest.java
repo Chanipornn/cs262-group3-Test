@@ -39,7 +39,7 @@ class OrderIntegrationTest {
     // TC_I01: create order
     // ==============================
     @Test
-    void testCreateOrder() throws Exception {
+    void TC_I01_testCreateOrder() throws Exception {
 
         Orders mockOrder = new Orders();
         mockOrder.setTotalAmount(200.0);
@@ -62,7 +62,7 @@ class OrderIntegrationTest {
     // TC_I02: verify save called
     // ==============================
     @Test
-    void testOrderSavedToDatabase() throws Exception {
+    void TC_I02_testOrderSavedToDatabase() throws Exception {
 
         Orders mockOrder = new Orders();
         mockOrder.setTotalAmount(100.0);
@@ -80,14 +80,14 @@ class OrderIntegrationTest {
                 .content(requestJson))
                 .andExpect(status().isOk());
 
-        verify(orderRepository).save(any()); // 👈 สำคัญ
+        verify(orderRepository).save(any()); 
     }
 
     // ==============================
     // TC_I03: response contains total
     // ==============================
     @Test
-    void testResponseContainsTotal() throws Exception {
+    void TC_I03_testResponseContainsTotal() throws Exception {
 
         Orders mockOrder = new Orders();
         mockOrder.setTotalAmount(200.0);
