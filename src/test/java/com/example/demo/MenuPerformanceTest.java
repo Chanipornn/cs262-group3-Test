@@ -11,18 +11,18 @@ import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class MenuPerformanceTest {
-	
-	@Autowired
+
+    @Autowired
     private TestRestTemplate restTemplate;
-	
-	@LocalServerPort
+
+    @LocalServerPort
     private int port;
 
     private String baseUrl() {
         return "http://localhost:" + port;
     }
 
-    // TC_P01: โหลดเมนู (GET /api/menu หลายครั้ง)
+    // TC_P01: โหลดเมนู
     @Test
     void TC_P01_testLoadMenuPerformance() {
 
@@ -33,7 +33,7 @@ public class MenuPerformanceTest {
             long start = System.currentTimeMillis();
 
             ResponseEntity<String> response =
-                    restTemplate.getForEntity("/api/menu", String.class);
+                    restTemplate.getForEntity(baseUrl() + "/api/menu", String.class);
 
             long end = System.currentTimeMillis();
             totalTime += (end - start);
@@ -42,13 +42,12 @@ public class MenuPerformanceTest {
         }
 
         long avgTime = totalTime / requestCount;
-
         System.out.println("Average Response Time: " + avgTime + " ms");
 
-        assertTrue(avgTime < 2000); // < 2 วินาที
+        assertTrue(avgTime < 2000);
     }
-    
-    // TC_P02: Baseline Test (โหลดเมนู)
+
+    // TC_P02: Concurrent Users
     @Test
     void TC_P02_testConcurrentUsers() throws InterruptedException {
 
@@ -58,23 +57,19 @@ public class MenuPerformanceTest {
         for (int i = 0; i < users; i++) {
             threads[i] = new Thread(() -> {
                 ResponseEntity<String> response =
-                        restTemplate.getForEntity("/api/menu", String.class);
+                        restTemplate.getForEntity(baseUrl() + "/api/menu", String.class);
 
                 assertEquals(200, response.getStatusCodeValue());
             });
         }
 
-        // start พร้อมกัน
         for (Thread t : threads) t.start();
-
-        // รอทุก thread จบ
         for (Thread t : threads) t.join();
 
         System.out.println("Concurrent test ผ่าน (20 users)");
     }
-    
-    
-    // TC_P03: โหลดหน้าไม่เกิน 3 วิ
+
+    // TC_P03: โหลด < 3 วิ
     @Test
     void TC_P03_testPageLoadUnder3Seconds() {
 
@@ -95,7 +90,6 @@ public class MenuPerformanceTest {
 
             assertEquals(HttpStatus.OK, response.getStatusCode());
 
-            // เช็คแต่ละ request
             assertTrue(responseTime < 3000,
                     "ช้าเกิน: " + responseTime + " ms");
         }
@@ -104,8 +98,6 @@ public class MenuPerformanceTest {
 
         System.out.println("Avg Load (<3s): " + avgTime + " ms");
 
-        // เช็คค่าเฉลี่ย
         assertTrue(avgTime < 3000);
     }
-
 }
